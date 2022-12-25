@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="viewModel"
+            type="com.fintold.moviesapp.uI.MoviesViewModel" />
+    </data>
+    <com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:endIconDrawable="@drawable/ic_search_icon"
+        app:hintEnabled="true"
+        app:hintAnimationEnabled="false"
+
+        android:hint="@string/search"
+        app:endIconMode="custom"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:hintTextColor="@color/black"
+        app:endIconTint="@color/black">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:text="@={viewModel.searchKeyWord}"
+            android:maxLines="1"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:background="@drawable/search_view_corners"/>
+    </com.google.android.material.textfield.TextInputLayout>
+</layout>
+<!---->

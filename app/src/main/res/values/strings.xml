@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MoviesApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">Search</string>
+    <string name="production_date_format">(%s)</string>
+    <string name="movie_image_content_description">it is the poster of the movie</string>
+    <string name="no_results_found">No results found</string>
+    <string name="description">Description</string>
+    <string name="all">All</string>
+    <string name="movie_date_rating_format">(%1$s) &#160; rating: %2$.1f</string>
+</resources>

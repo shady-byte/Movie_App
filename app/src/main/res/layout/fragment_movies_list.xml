@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.fintold.moviesapp.uI.MoviesViewModel" />
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+
+        <include
+            android:id="@+id/home_searchView"
+            app:viewModel ="@{viewModel}"
+            layout="@layout/search_view"/>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:scrollbars="none">
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/genres_chip_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:checked="true"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:text="@string/all"
+                    app:checkedIconEnabled="false"
+                    app:chipBackgroundColor="@drawable/chip_color_selection"
+                    app:chipCornerRadius="5dp"
+                    app:chipEndPadding="20dp"
+                    app:chipStartPadding="20dp"
+                    app:chipStrokeColor="@color/black"
+                    app:chipStrokeWidth="1dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/movies_list_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+
+            app:MovieListAdapter="@{viewModel.moviesList}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:itemCount="10"
+            tools:listitem="@layout/movie_item_layout" />
+
+        <ProgressBar
+            android:id="@+id/loading_data"
+            style="?android:attr/progressBarStyle"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/black"
+            app:LoadingMoviesAdapter="@{viewModel.moviesList}"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+</layout>
+
