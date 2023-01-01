@@ -1,10 +1,8 @@
 package com.fintold.moviesapp.uI
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.fintold.moviesapp.R
+import com.fintold.moviesapp.dataSource.Movie
 import com.fintold.moviesapp.databinding.FragmentSplashBinding
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -32,13 +31,14 @@ class SplashFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        object : CountDownTimer(2000, 1000) {
+        object : CountDownTimer(3000, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
 
             override fun onFinish() {
                 findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToMoviesListFragment())
             }
         }.start()
+        //viewModel.deleteAllMovies()
         viewModel.getGenres()
         viewModel.getMoreMovies()
     }

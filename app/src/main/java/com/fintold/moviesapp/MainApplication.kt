@@ -15,6 +15,5 @@ class MainApplication: Application() {
             androidLogger(Level.ERROR)
             modules(appModule)
         }
-
     }
 }

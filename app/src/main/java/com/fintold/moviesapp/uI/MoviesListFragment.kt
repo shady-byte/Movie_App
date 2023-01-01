@@ -1,6 +1,7 @@
 package com.fintold.moviesapp.uI
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,39 +13,40 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fintold.moviesapp.R
 import com.fintold.moviesapp.adapters.MoviesListAdapter
 import com.fintold.moviesapp.adapters.OnClickListener
+import com.fintold.moviesapp.dataSource.Movie
 import com.fintold.moviesapp.databinding.ChipItemLayoutBinding
 import com.fintold.moviesapp.databinding.FragmentMoviesListBinding
 import com.google.android.material.chip.Chip
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import kotlin.math.absoluteValue
 
 class MoviesListFragment : Fragment() {
     private var binding: FragmentMoviesListBinding ?=null
     private val viewModel by sharedViewModel<MoviesViewModel>()
-    //private var pageNumber = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movies_list, container, false)
 
+        addGenres(container)
+
         binding?.lifecycleOwner = viewLifecycleOwner
         binding?.viewModel = viewModel
         binding?.moviesListRecyclerView?.adapter = MoviesListAdapter(OnClickListener {
-            viewModel.setSelectedMovie(it)
-            navigateToMovieDetails()
-        },viewModel)
+            navigateToMovieDetails(it)
+        })
 
-        binding?.moviesListRecyclerView?.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+
+        binding?.moviesListRecyclerView?.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-
-                if(!recyclerView.canScrollVertically(1)) {
-                    viewModel.pageNumber++
-                    viewModel.getMoreMovies()
-                    viewModel.getMoviesByGenre()
+                if(!recyclerView.canScrollVertically(1) && viewModel.genreDisplayed.value == "All") {
+                    viewModel.updateUi()
                 }
             }
         })
+
+        binding?.moviesListRecyclerView?.itemAnimator = null
+
 
         binding?.homeSearchView?.searchView?.setEndIconOnClickListener {
             viewModel.searchForMovieByName()
@@ -52,8 +54,6 @@ class MoviesListFragment : Fragment() {
         }
         handleChipsSelection()
         searchViewListener()
-        addGenres(container)
-
 
         return binding?.root
     }
@@ -61,19 +61,17 @@ class MoviesListFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         (requireActivity() as MainActivity).supportActionBar?.hide()
-        viewModel.getMoviesByGenre()
     }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
-        //(requireActivity() as MainActivity).supportActionBar?.show()
         binding = null
     }
 
-    private fun navigateToMovieDetails() {
+    private fun navigateToMovieDetails(movie: Movie) {
         findNavController().navigate(
-            MoviesListFragmentDirections.actionMoviesListFragmentToMovieDetailsFragment())
+            MoviesListFragmentDirections.actionMoviesListFragmentToMovieDetailsFragment(movie))
     }
 
     private fun navigateToSearchFragment() {
@@ -116,7 +114,7 @@ class MoviesListFragment : Fragment() {
                 }
                 i++
             }
-            viewModel.clearMovies()
+            viewModel.clearMoviesList()
         }
 
         viewModel.genreDisplayed.observe(viewLifecycleOwner) {

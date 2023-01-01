@@ -13,20 +13,20 @@ interface RemoteSource: DataSource {
 }
 
 interface LocalSource: DataSource {
-    suspend fun addMovies(movies: List<Movie>)
-    suspend fun getMovies(pageNumber: Int): Result<List<Movie>>
+    suspend fun addMovies(movies: List<Movie>): Result<Boolean>
+    //suspend fun getMovies(pageNumber: Int): Result<List<Movie>>
     suspend fun searchForMovieByName(movieName: String): Result<List<Movie>>
-    suspend fun searchForMovieById(movieId: Int): Result<Movie>
-    suspend fun deleteMovies()
+    //suspend fun searchForMovieById(movieId: Int): Result<Movie>
+    suspend fun deleteMovies(): Result<Boolean>
 
-    suspend fun addGenres(genres: List<Genre>)
+    suspend fun addGenres(genres: List<Genre>): Result<Boolean>
     suspend fun getGenreByName(genreName: String): Result<Genre>
-    suspend fun deleteGenres()
+    suspend fun deleteGenres(): Result<Boolean>
 
-    suspend fun addMovieWithGenres(movieWithGenre: MovieGenreCrossRef)
-    suspend fun getGenresWithMovies(): Result<List<GenreWithMovies>>
-    suspend fun getOneGenreWithMovies(genreId: Int, pageNumber: Int): Result<GenreWithMovies>
-    suspend fun deleteMoviesWithGenres()
+    suspend fun addMovieWithGenre(movieWithGenre: MovieGenreCrossRef): Result<Boolean>
+    suspend fun getAllMovies(pageNumber: Int): Result<List<Movie>>
+    suspend fun getMoviesByGenre(genreId: Int, pageNumber: Int): Result<GenreWithMovies>
+    suspend fun deleteAllMoviesWithGenres(): Result<Boolean>
 
 }
 

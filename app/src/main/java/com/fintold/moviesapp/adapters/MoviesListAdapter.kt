@@ -9,7 +9,7 @@ import com.fintold.moviesapp.dataSource.Movie
 import com.fintold.moviesapp.databinding.MovieItemLayoutBinding
 import com.fintold.moviesapp.uI.MoviesViewModel
 
-class MoviesListAdapter(private val clickListener: OnClickListener, private val viewModel: MoviesViewModel):
+class MoviesListAdapter(private val clickListener: OnClickListener):
     ListAdapter<Movie,MoviesListAdapter.ViewHolder>(MovieCallBack){
 
     companion object MovieCallBack: DiffUtil.ItemCallback<Movie>() {

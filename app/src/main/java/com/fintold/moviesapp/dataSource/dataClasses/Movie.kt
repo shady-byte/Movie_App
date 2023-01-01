@@ -1,9 +1,12 @@
 package com.fintold.moviesapp.dataSource
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "movies_table")
 data class Movie(
     var imageUrl: String,
@@ -18,7 +21,7 @@ data class Movie(
 
     @PrimaryKey(autoGenerate = false)
     val movieId: Long,
-)
+):Parcelable
 
 data class RemoteMovie(
     @Json(name = "poster_path") var imageUrl: String,

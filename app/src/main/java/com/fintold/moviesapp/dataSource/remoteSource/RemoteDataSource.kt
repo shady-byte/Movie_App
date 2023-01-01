@@ -4,62 +4,34 @@ import com.fintold.moviesapp.adapters.Result
 import com.fintold.moviesapp.dataSource.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.lang.Exception
+import kotlin.Exception
 
 class RemoteDataSource: RemoteSource {
     override suspend fun getMovies(pageNumber: Int): Result<List<RemoteMovie>> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val result = MoviesApi.moviesRetrofitService.getMovies(pageNumber = pageNumber)
-                val movies = result.results
-                //val localMovies = convertRemoteMovieToMovie(movies)
-                if(movies.isNotEmpty()) {
-                    Result.Success(movies)
-                } else {
-                    Result.Error("Something went wrong from remote data source")
-                }
-            } catch (ex: Exception) {
-                Result.Error("Something went wrong from remote data source ${ex.message}")
+        return try {
+            val result = MoviesApi.moviesRetrofitService.getMovies(pageNumber)
+            val movies = result.results
+            if(movies.isEmpty()) {
+                Result.Error("Error while getting movies remote source")
+            } else {
+                Result.Success(movies)
             }
+        }catch (ex: Exception) {
+            Result.Error("Error while getting movies remote source ${ex.message}")
         }
     }
 
     override suspend fun getGenres(): Result<List<Genre>> {
-        return withContext(Dispatchers.IO) {
-            try {
-                val result = MoviesApi.genresRetrofitService.getGenres()
-                val genres = result.genres
+        return try {
+            val result = MoviesApi.genresRetrofitService.getGenres()
+            val genres = result.genres
+            if(genres.isEmpty()) {
+                Result.Error("Error while getting genres remote source")
+            } else {
                 Result.Success(genres)
-            } catch (ex: Exception) {
-                Result.Error("Something went wrong with genres ${ex.message}")
             }
+        } catch (ex: Exception) {
+            Result.Error("Error while getting genres remote source ${ex.message}")
         }
     }
 }
-
-private fun getFullImageUrlForMovies(movies: List<Movie>): List<Movie>? {
-    return try {
-        movies.map {
-            it.imageUrl = MOVIE_IMAGE_BASE_URL + it.imageUrl
-        }
-        movies
-    } catch(ex: Exception) {
-        null
-    }
-}
-
-private fun convertRemoteMovieToMovie(movies: List<RemoteMovie>): List<Movie>? {
-    return try {
-        val localMovies = mutableListOf<Movie>()
-        movies.forEach {
-            val movie = Movie(imageUrl = it.imageUrl, name = it.name, productionDate = it.productionDate,
-               rating = it.rating, description = it.description, movieId = it.movieId)
-            localMovies.add(movie)
-        }
-        localMovies
-    } catch (ex: Exception) {
-        null
-    }
-}
-
-private fun addMoviesWithGenresToTable() {}

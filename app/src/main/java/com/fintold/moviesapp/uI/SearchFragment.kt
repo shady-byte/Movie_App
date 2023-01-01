@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.fintold.moviesapp.R
 import com.fintold.moviesapp.adapters.MoviesListAdapter
 import com.fintold.moviesapp.adapters.OnClickListener
+import com.fintold.moviesapp.dataSource.Movie
 import com.fintold.moviesapp.databinding.FragmentSearchBinding
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -32,9 +33,8 @@ class SearchFragment : Fragment() {
         searchViewListener()
 
         binding?.moviesSearchResultRecyclerView?.adapter = MoviesListAdapter(OnClickListener {
-            viewModel.setSelectedMovie(it)
-            navigateToMovieDetails()
-        },viewModel)
+            navigateToMovieDetails(it)
+        })
         return binding?.root
     }
 
@@ -60,7 +60,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun navigateToMovieDetails() {
-        findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToMovieDetailsFragment())
+    private fun navigateToMovieDetails(movie: Movie) {
+        findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToMovieDetailsFragment(movie))
     }
 }

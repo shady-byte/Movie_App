@@ -8,7 +8,6 @@ import com.squareup.moshi.Json
 data class Genre(
     @PrimaryKey(autoGenerate = false)
     @Json(name = "id") val genreId: Int,
-
     val name: String,
 )
 

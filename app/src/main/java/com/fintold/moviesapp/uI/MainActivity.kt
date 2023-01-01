@@ -2,12 +2,14 @@ package com.fintold.moviesapp.uI
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.fintold.moviesapp.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private val navController by lazy {
@@ -16,6 +18,7 @@ class MainActivity : AppCompatActivity() {
         navHostFragment.navController
     }
     private val appBarConfiguration by lazy { AppBarConfiguration(navController.graph) }
+    private val viewModel by viewModel<MoviesViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

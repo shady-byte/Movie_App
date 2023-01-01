@@ -25,6 +25,7 @@ fun RecyclerView.bindAdapter(moviesList: List<Movie>?) {
         visibility = View.VISIBLE
         val adapter = this.adapter as MoviesListAdapter
         adapter.submitList(it)
+
     }
 }
 
