@@ -1,7 +1,6 @@
 package com.fintold.moviesapp.uI
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,12 +39,12 @@ class MoviesListFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if(!recyclerView.canScrollVertically(1) && viewModel.genreDisplayed.value == "All") {
-                    viewModel.updateUi()
+                    viewModel.getAllMovies()
                 }
             }
         })
 
-        binding?.moviesListRecyclerView?.itemAnimator = null
+        //binding?.moviesListRecyclerView?.itemAnimator = null
 
 
         binding?.homeSearchView?.searchView?.setEndIconOnClickListener {

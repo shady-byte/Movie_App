@@ -1,5 +1,6 @@
 package com.fintold.moviesapp.dataSource.localSource
 
+
 import android.util.Log
 import com.fintold.moviesapp.adapters.Result
 import com.fintold.moviesapp.dataSource.*
@@ -11,12 +12,11 @@ class LocalDataSource(private val databaseDao: DatabaseDao): LocalSource {
     //MOVIES TABLE
     override suspend fun addMovies(movies: List<Movie>): Result<Boolean> {
         return try {
-          val result = databaseDao.addMovies(*movies.toTypedArray())
-          if(result.isEmpty()) {
-              Result.Error("Error while adding movies local source")
-          } else {
-              Result.Success(true)
-          }
+            val result = databaseDao.addMovies(*movies.toTypedArray())
+            if(result.isNotEmpty())
+                Result.Success(true)
+            else
+                Result.Error("Error while adding movies local source")
         } catch (ex: Exception) {
             Result.Error("Error while adding movies local source ${ex.message}")
         }
@@ -103,7 +103,7 @@ class LocalDataSource(private val databaseDao: DatabaseDao): LocalSource {
 
     override suspend fun getAllMovies(pageNumber: Int): Result<List<Movie>> {
         return  try {
-            val result = databaseDao.getAllMovies((pageNumber-1)*19)
+            val result = databaseDao.getAllMovies((pageNumber-1)*20) //(pageNumber-1)*19
             if(result.isEmpty()) {
                 Result.Error("Error while getting movies local source")
             } else {
@@ -114,10 +114,11 @@ class LocalDataSource(private val databaseDao: DatabaseDao): LocalSource {
         }
     }
 
-    override suspend fun getMoviesByGenre(genreId: Int, pageNumber: Int): Result<GenreWithMovies> {
+    override suspend fun getMoviesByGenre(genreId: Int, pageNumber: Int): Result<List<Movie>> {
         return try {
             val result = databaseDao.getMoviesByGenre(genreId)
-            Result.Success(result)
+            Result.Success(result.moviesList)
+
         } catch (ex: Exception) {
             Result.Error("Error while getting movies by genre local source ${ex.message}")
         }

@@ -9,10 +9,7 @@ import com.fintold.moviesapp.dataSource.dataClasses.MovieGenreCrossRef
 interface RepositoryInterface {
     //MOVIES TABLE
     suspend fun addMovies(movies: List<Movie>): Result<Boolean>
-    suspend fun updateMovies(pageNumber: Int): Result<Boolean>
-    //suspend fun getMovies(pageNumber: Int): Result<List<Movie>>
     suspend fun getMoviesByName(movieName: String): Result<List<Movie>>
-    //suspend fun getMovieById(movieId: Int): Result<Movie>
     suspend fun deleteMovies(): Result<Boolean>
 
     //GENRES TABLE
@@ -24,7 +21,8 @@ interface RepositoryInterface {
     //MOVIES WITH GENRES TABLE
     suspend fun addMovieWithGenre(movieWithGenre: MovieGenreCrossRef): Result<Boolean>
     suspend fun getAllMovies(pageNumber: Int): Result<List<Movie>>
-    suspend fun getMoviesByGenre(genreId: Int,pageNumber: Int): Result<GenreWithMovies>
+    suspend fun getMoviesByGenre(genreId: Int,pageNumber: Int): Result<List<Movie>> //GenreWithMovies
     suspend fun deleteMoviesWithGenres(): Result<Boolean>
+    suspend fun getMoviesFromRemoteSource(pageNumber: Int): Result<List<Movie>>
 
 }

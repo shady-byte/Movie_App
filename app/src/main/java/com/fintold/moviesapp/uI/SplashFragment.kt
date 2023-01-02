@@ -40,7 +40,7 @@ class SplashFragment : Fragment() {
         }.start()
         //viewModel.deleteAllMovies()
         viewModel.getGenres()
-        viewModel.getMoreMovies()
+        viewModel.getAllMovies()
     }
 
     override fun onDestroyView() {

@@ -8,13 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.fintold.moviesapp.adapters.Result
 import com.fintold.moviesapp.dataSource.Genre
 import com.fintold.moviesapp.dataSource.Movie
-import com.fintold.moviesapp.dataSource.dataClasses.GenreWithMovies
 import com.fintold.moviesapp.intermediateLayer.RepositoryInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.koin.core.component.getScopeId
-import kotlin.math.log
 
 const val TAG = "MainTest"
 class MoviesViewModel(private val repository: RepositoryInterface): ViewModel() {
@@ -33,17 +30,16 @@ class MoviesViewModel(private val repository: RepositoryInterface): ViewModel() 
     val searchKeyWord = MutableLiveData<String>()
     val genreDisplayed = MutableLiveData<String>("All")
     var pageNumber = 1
-    var loadingMovies = false
 
 
-    fun getMoreMovies() {
+    fun getAllMovies() {
         viewModelScope.launch {
-            loadingMovies = true
             val result = withContext(Dispatchers.IO) {
-                repository.updateMovies(pageNumber)
+                repository.getMoviesFromRemoteSource(pageNumber)
             }
-            if(result is Result.Success) {
-                getMoviesByGenre()
+            if(result is Result.Success<List<Movie>>) {
+                addMoviesToBeDisplayed(result.data)
+                pageNumber++
             }
         }
     }
@@ -77,12 +73,7 @@ class MoviesViewModel(private val repository: RepositoryInterface): ViewModel() 
     fun getMoviesByGenre() {
         viewModelScope.launch {
             if(genreDisplayed.value == "All") {
-                val result = withContext(Dispatchers.IO) {
-                    repository.getAllMovies(pageNumber)
-                }
-                if(result is Result.Success<List<Movie>> && result.data.isNotEmpty()) {
-                    addMoviesToBeDisplayed(result.data)
-                }
+                getAllMovies()
             } else {
                 val result = withContext(Dispatchers.IO) {
                     repository.getGenreByName(genreDisplayed.value!!)
@@ -92,8 +83,8 @@ class MoviesViewModel(private val repository: RepositoryInterface): ViewModel() 
                         repository.getMoviesByGenre(genreId = result.data.genreId,pageNumber)
                     }
                     if(moviesResult is Result.Success) {
-                        val movies = moviesResult.data.moviesList
-                        addMoviesToBeDisplayed(movies)
+                        addMoviesToBeDisplayed(moviesResult.data)
+                        pageNumber++
                     }
                 }
             }
@@ -110,12 +101,9 @@ class MoviesViewModel(private val repository: RepositoryInterface): ViewModel() 
             if(moviesList.value == null) {
                 _moviesList.value = movies
             } else {
-                if(!moviesList.value?.containsAll(movies)!!) {
-                    val oldList = moviesList.value
-                    _moviesList.value = oldList?.plus(movies)
-                }
+                val oldList = moviesList.value
+                _moviesList.value = oldList?.plus(movies)
             }
-            loadingMovies = false
         }
     }
 
@@ -123,15 +111,6 @@ class MoviesViewModel(private val repository: RepositoryInterface): ViewModel() 
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteMovies()
             repository.deleteMoviesWithGenres()
-        }
-    }
-
-    fun updateUi() {
-        viewModelScope.launch {
-            if(!loadingMovies) {
-                pageNumber++
-                getMoreMovies()
-            }
         }
     }
 

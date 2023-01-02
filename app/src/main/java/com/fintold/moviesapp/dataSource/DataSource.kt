@@ -25,7 +25,7 @@ interface LocalSource: DataSource {
 
     suspend fun addMovieWithGenre(movieWithGenre: MovieGenreCrossRef): Result<Boolean>
     suspend fun getAllMovies(pageNumber: Int): Result<List<Movie>>
-    suspend fun getMoviesByGenre(genreId: Int, pageNumber: Int): Result<GenreWithMovies>
+    suspend fun getMoviesByGenre(genreId: Int, pageNumber: Int): Result<List<Movie>>//GenreWithMovies
     suspend fun deleteAllMoviesWithGenres(): Result<Boolean>
 
 }

@@ -1,5 +1,6 @@
 package com.fintold.moviesapp.dataSource.localSource
 
+import androidx.annotation.WorkerThread
 import androidx.room.*
 import com.fintold.moviesapp.dataSource.Genre
 import com.fintold.moviesapp.dataSource.Movie
@@ -12,17 +13,9 @@ interface DatabaseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addMovies(vararg movies: Movie): List<Long>
 
-    //get movies from database
-    //@Query("SELECT * FROM movies_table LIMIT 19 OFFSET (:pageNumber-1)*19")
-    //fun getMovies(pageNumber: Int): List<Movie>
-
     //get specific movie by name
     @Query("SELECT * FROM  movies_table WHERE name LIKE '%'||:movieName||'%'")
     fun searchForMovieByName(movieName: String): List<Movie>
-
-    //get specific movie by id
-    //@Query("SELECT * FROM  movies_table WHERE movieId=:movieId")
-    //fun searchForMovieById(movieId: Int): Movie
 
     //delete all movies from database
     @Query("DELETE FROM movies_table")
@@ -53,7 +46,7 @@ interface DatabaseDao {
 
     //get all genres with their movies
     @Transaction
-    @Query("SELECT * FROM movies_table LIMIT 19 OFFSET :offset")// LIMIT 19 OFFSET (:pageNumber-1)*19"
+    @Query("SELECT * FROM movies_table LIMIT 20 OFFSET :offset")
     fun getAllMovies(offset: Int): List<Movie>
 
     @Transaction
